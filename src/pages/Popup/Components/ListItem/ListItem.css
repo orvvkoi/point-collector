@@ -1,0 +1,41 @@
+/**
+ * item-container
+ -----------------------------*/
+.item-container {
+    background: #444359;
+    font-size: 14px;
+}
+
+.item-container li {
+    border-bottom: 1px solid #4b4a5e;
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
+    color: #d9d9d9;
+    padding: 12px 28px 12px 28px;
+    -webkit-transition: all 0.25s ease;
+    -o-transition: all 0.25s ease;
+    transition: all 0.25s ease;
+}
+
+.item-container li:hover {
+    cursor:pointer;
+    background: #b63b4d;
+    color: #FFF;
+}
+
+.item-container div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.transaction {
+    min-width: 0;
+}
+
+.transaction .title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

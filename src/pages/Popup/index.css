@@ -1,0 +1,28 @@
+body {
+    width: 400px;
+    max-height: 600px;
+    margin: 0;
+    font-family: 'Apple SD Gothic Neo',arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    position: relative;
+}
+
+code {
+    font-family: Consolas, 'Courier New',
+    monospace;
+}
+
+.mr-3 {
+    margin-right: 3px;
+}
+
+.icon-19 {
+    width: 19px;
+    height: 19px;
+}
+
+.text_muted {
+    color: #95999c;
+}
+

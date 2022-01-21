@@ -1,0 +1,65 @@
+
+/**
+ * SlidingPane Layer Popup
+ -----------------------------*/
+.item-detail-container {
+    background-color: #222;
+    min-height: 100px;
+    padding: 10px 30px;
+}
+
+.table-container {
+    display: flex;
+    flex-flow: column nowrap;
+    background-color: #222;
+    width: 100%;
+}
+
+.table-row {
+    display: flex;
+    flex-flow: row nowrap;
+    width: 100%;
+}
+
+.header {
+    border: none;
+    overflow: auto auto;
+    text-transform: uppercase;
+    color: #bbb;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.row-item {
+    display: flex;
+    flex: 1;
+    padding: 3px 0;
+    justify-content: center;
+    align-items: center;
+}
+
+/**
+ * SlidingPane
+ -----------------------------*/
+.slide-pane__header {
+    background-color: #222;
+    color: #fff;
+}
+
+.slide-pane__subtitle {
+    color: #6c757d;
+}
+
+.slide-pane__close {
+    margin-left: 5px;
+    padding: 10px;
+}
+
+.slide-pane__title-wrapper {
+    margin-left: 5px;
+}
+
+.slide-pane__content {
+    padding: 0;
+    background-color: #222;
+}
