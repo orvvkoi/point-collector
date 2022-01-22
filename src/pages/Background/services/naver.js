@@ -24,27 +24,44 @@ const accountInfo = async() => {
 }
 
 const verifyLogin = async () => {
-    console.log('call verifyLogin')
     const response = await fetch(NAVER.url['verifyLogin'], NAVER.reqOpts.default);
 
     if (response.ok) {
-        const mail = await response.json();
+        const result = await response.json();
 
-        return mail['RESULT'] === 'SUCCESS';
+        return result['RESULT'] === 'SUCCESS';
     } else {
         console.log("HTTP-Error: ", response.status);
         return false;
     }
 }
 
-const fetchRewards = async (url = NAVER.url['fetchRewards']) => {
+/**
+ * return value
+ * {"waitingAmt":0,"chargeAmt":84174,"acmAmt":37,"expectedAcmAmt":0,"refundableChargeAmt":84174,"showLayer":false,"total":84211}
+ * @returns {Promise<boolean|*|string>}
+ */
+const summaryPoint = async() => {
+    const response = await fetch(NAVER.url['summaryPoint'], NAVER.reqOpts.default);
+
+    if (response.ok) {
+        const result = await response.json();
+
+        return result['htReturnValue'] ? result['htReturnValue']['summaryPoint'] : '';
+    } else {
+        console.log("HTTP-Error: ", response.status);
+        return false;
+    }
+}
+
+const fetchRewards = async (url = NAVER.url['desktopReward']) => {
     const response = await fetch(url, NAVER.reqOpts.default);
 
     const reward = await response.json();
 
     console.log('reward ', reward.code)
 
-    return reward.code === "00" && reward.result.ads;
+    return reward.code === "00" && reward.result;
 }
 
 const allowedOnlyOnceRewardFilter = (rewards = []) => {
@@ -59,7 +76,7 @@ const allowedOnlyOnceRewardFilter = (rewards = []) => {
     });
 }
 
-const everyDayRewardsFilter = (rewards = []) => {
+const everyDayRewardFilter = (rewards = []) => {
     return rewards.filter(
         (data) => {
             return data.subtitle.indexOf('보러가면') > -1
@@ -67,22 +84,24 @@ const everyDayRewardsFilter = (rewards = []) => {
         }
     ).map(reward => {
         reward.type = 'every';
-        reward.reqUrl = NAVER.url.everyDayRewards(reward.parentId);
+        reward.reqUrl = NAVER.url.participate(reward.parentId);
         reward.originUrl = reward.reqUrl;
 
         return reward;
     });
 }
 
-const mobileRewardsFilter = (rewards = []) => {
+const mobileRewardFilter = (requestId, rewards = []) => {
     return rewards.filter(
         (data) => {
-            return data.subtitle.indexOf('방문하면') > -1
+            return data.subtitle.indexOf('방문하면') > -1;
+          //  || data.subtitle.indexOf('찜하기만') > -1
         }
     ).map(reward => {
         reward.type = 'mobile';
+        reward.requestId = requestId;
         reward.originUrl = reward.reqUrl;
-        reward.reqUrl = NAVER.url.everyDayRewards(reward.id);
+        reward.reqUrl = NAVER.url.participate(reward.parentId);
 
         return reward;
     });
@@ -95,19 +114,20 @@ const mobileRewardsFilter = (rewards = []) => {
  * User-agent로 체크 안함. 분석 필요.
  */
 const getAvailableRewards = async (accountId) => {
-    const rewards = await fetchRewards();
-    // const mobileRewards = await fetchRewards(NAVER.url['fetchMobileRewards']);
+    const {ads: desktopRewards} = await fetchRewards();
+    const {ads: mobileRewards, requestId} = await fetchRewards(NAVER.url['mobileReward']);
 
-    const onceRewards = allowedOnlyOnceRewardFilter(rewards);
-    const everyDayRewards = everyDayRewardsFilter(rewards);
-    // const mobileRewardsTest = mobileRewardsFilter(mobileRewards);
+    const onceRewards = allowedOnlyOnceRewardFilter(desktopRewards);
+    const everyDayRewards = everyDayRewardFilter(desktopRewards);
+    const availableMobileRewards = mobileRewardFilter(requestId, mobileRewards);
 
-    if (!rewards && !everyDayRewards && !onceRewards) {
+    if (!desktopRewards && !everyDayRewards && !onceRewards && !availableMobileRewards) {
         return false;
     }
 
-    let result = [...onceRewards, ...everyDayRewards];
+    let result = [...onceRewards, ...everyDayRewards, ...availableMobileRewards];
 
+    console.log('availableMobileRewards ', availableMobileRewards);
     console.log('onceRewards ', onceRewards)
     console.log('everyDayRewards ', everyDayRewards)
 
@@ -143,8 +163,20 @@ const fetchRewardResults = async (accountId, rewards) => {
     const createdAt = common.getTime();
 
     let responses = await Promise.allSettled(rewards.map(async reward => {
-        const response = await fetch(reward.reqUrl, NAVER.reqOpts[reward.type]);
 
+        /**
+         * 데스크탑에서 모바일 체크 우회를 위해 선행 되어야함.
+         * 모바일용은 매 리퀘스트마다 토큰 재발급.
+         */
+        if(reward.type === 'mobile') {
+            const {code, result} = await fetch(NAVER.url['mobileToken'](reward.id, reward.requestId), NAVER.reqOpts.default);
+
+            if(code === "00") {
+                await fetch(result.viewUrl, NAVER.reqOpts.default);
+            }
+        }
+
+        const response = await fetch(reward.reqUrl, NAVER.reqOpts[reward.type]);
         const responseText = await response.text();
 
         let isSuccess = false;
@@ -207,6 +239,7 @@ const fetchRewardResults = async (accountId, rewards) => {
         let payload = {
             id: reward.id,
             title: reward.title,
+            desc: reward.subtitle,
             reward: reward.reward,
             originUrl: reward.originUrl,
             serviceKey,
