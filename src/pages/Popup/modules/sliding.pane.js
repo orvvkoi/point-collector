@@ -7,11 +7,11 @@ const Pane = (props) => {
     return (
         <SlidingPane
             className={props.className || 'item-detail-layer-popup'}
-            overlayClassName="some-custom-overlay-class"
             isOpen={props.isPaneOpen || false}
             title={props.title}
             subtitle={props.subTitle}
             width={props.width || "100%"}
+            overlayClassName={props.overlayClassName || "slide-pane_overlay"}
             onRequestClose={() => props.setIsPaneOpen(false)}
         >
             {props.children}

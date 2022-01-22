@@ -41,6 +41,10 @@
 /**
  * SlidingPane
  -----------------------------*/
+.slide-pane_overlay {
+    position: absolute;
+}
+
 .slide-pane__header {
     background-color: #222;
     color: #fff;
