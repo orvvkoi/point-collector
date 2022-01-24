@@ -1,4 +1,4 @@
-import {getCookie} from './modules/cookie';
+import {getCookie} from '../../utils/cookieUtil';
 
 const SES_COOKIE_NAME = 'NID_SES';
 const AUT_COOKIE_NAME = 'NID_SES';

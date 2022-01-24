@@ -27,65 +27,6 @@ ul {
     padding: 20px 20px 6px 20px;
 }
 
-.main-container > .service-filter {
-    padding: 0px 20px 10px 20px;
-    color: #8a9ca5;
-    font-size: 14px;
-    box-shadow: 0 -1px 0 #babac0 inset;
-}
-
-
-.service-filter .service-group {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-}
-
-.service-group .service {
-    display: flex;
-    align-items: center;
-    cursor:pointer;
-    font-weight: bold;
-    margin-bottom: 5px;
-    opacity: 0.6;
-    transition: 0.3s;
-}
-
-.service-group .service span {
-    margin-right: 7px;
-}
-
-.service-detail {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    overflow: hidden;
-    padding-top: 5px;
-    max-height: 0;
-    transition: max-height .5s ease-in-out;
-}
-
-.service-detail.active {
-    max-height: 100px;
-    transition: max-height 0.25s ease-in;
-}
-
-.service-detail .account {
-    display: flex;
-    align-items: center;
-    padding: 0 5px 5px 0;
-    opacity: 0.6;
-    transition: 0.3s;
-    cursor: pointer;
-}
-
-.service-group .service.active, .service-group .service:hover,
-.service-detail .account.active, .service-detail .account:hover{
-    opacity: 1;
-    color: #d94f5c;
-}
 
 .empty {
     display: flex;

@@ -1,29 +1,33 @@
-import React, { useEffect, useContext, useState } from 'react';
-import "react-sliding-pane/dist/react-sliding-pane.css";
-import SlidingPane from "../../modules/sliding.pane";
-import {SlidePaneContext} from "../../contexts/SlidePaneContext";
-import OkIcon from "../../../../assets/img/ok.svg";
-import FailIcon from '../../../../assets/img/fail.svg';
-import LinkIcon from '../../../../assets/img/link.svg';
-import * as common from "../../../Background/common";
-import './ItemDetail.css';
+import React from 'react';
+import ReactTooltip from "react-tooltip";
+import SlidingPane from "../../../components/SlidingPane";
+import {SlidePaneContext} from "../../../contexts/SlidePaneContext";
+import OkIcon from "../../../assets/img/ok.svg";
+import FailIcon from "../../../assets/img/fail.svg";
+import LinkIcon from "../../../assets/img/link.svg";
+import {configUtil, dateUtil} from "../../../utils";
+import "./ItemDetail.css";
+
 
 
 const DetailContainer = (props) => {
 
     console.log('DetailContainer props ', props)
 
-    const {domain} = common.getServiceConfig(props.serviceKey);
+    const {domain} = configUtil.getConfig(props.serviceKey);
 
     /**
      * @TODO
      * 적립한 계정 정보 보여주기
      * 적립이 안된 경우, 사유 보여주기
      */
-    //const accountKey = common.getAccountInfo(props.serviceKey, props.accountId);
+    //const accountKey = storageUtil.getAccountInfo(props.serviceKey, props.accountId);
 
     return (
         <div className="item-detail-container">
+            {
+                props.desc ?  <div className="desc"><h4>Description</h4> <span>{props.desc}</span></div> : null
+            }
             <div className="table-container">
                 <div className="table-row header">
                     <div className="row-item">
@@ -40,15 +44,20 @@ const DetailContainer = (props) => {
                     </div>
                 </div>
 
-
                 <div className="table-row">
                     <div className="row-item">
-                        <img src={common.getFavicon(domain)} />
+                        <img src={configUtil.getFavicon(domain)} alt="service" />
                     </div>
                     <div className="row-item">
-                        <a href={props.url} target='_blank'><img src={LinkIcon} /></a>
+                        {
+                            props.originUrl ? <a href={props.originUrl} target='_blank' rel="noopener noreferrer"><img src={LinkIcon} alt="link" /></a> : null
+                        }
                     </div>
-                    <div className="row-item"><img src={props.isSuccess ? OkIcon : FailIcon}/></div>
+                    <div className="row-item">
+                        <img data-for="isSuccessIcon" src={props.isSuccess ? OkIcon : FailIcon} data-tip={props.isSuccess ? 'Done successfully.' : props.reason || 'Unknown Error'}  data-border="" alt="status" />
+
+                        <ReactTooltip id="isSuccessIcon" />
+                    </div>
                     <div className="row-item text_muted">{props.reward || 0}</div>
                 </div>
 
@@ -60,7 +69,7 @@ const DetailContainer = (props) => {
 const ItemDetail = () => {
     const  { isPaneOpen, setIsPaneOpen, paneProps } = React.useContext(SlidePaneContext);
 
-    const createdAt = common.dateFormat(paneProps.createdAt, 'YYYY-MM-DD HH:mm:ss');
+    const createdAt = dateUtil.dateFormat(paneProps.createdAt, 'YYYY-MM-DD HH:mm:ss');
 
     return (
         <SlidingPane {...paneProps} isPaneOpen={isPaneOpen} setIsPaneOpen={setIsPaneOpen} title={paneProps.title}  subTitle={createdAt} >

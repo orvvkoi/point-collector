@@ -8,6 +8,15 @@
     padding: 10px 30px;
 }
 
+.item-detail-container .desc {
+    display: flex;
+    flex-direction: column;
+    color: #bbb;
+    margin-bottom: 15px;
+    padding-left: 10px;
+    font-size: 14px;
+}
+
 .table-container {
     display: flex;
     flex-flow: column nowrap;
@@ -36,34 +45,4 @@
     padding: 3px 0;
     justify-content: center;
     align-items: center;
-}
-
-/**
- * SlidingPane
- -----------------------------*/
-.slide-pane_overlay {
-    position: absolute;
-}
-
-.slide-pane__header {
-    background-color: #222;
-    color: #fff;
-}
-
-.slide-pane__subtitle {
-    color: #6c757d;
-}
-
-.slide-pane__close {
-    margin-left: 5px;
-    padding: 10px;
-}
-
-.slide-pane__title-wrapper {
-    margin-left: 5px;
-}
-
-.slide-pane__content {
-    padding: 0;
-    background-color: #222;
 }

@@ -1,9 +1,9 @@
 import React, {useState} from "react";
-import {SlidePaneProvider} from "../../contexts/SlidePaneContext";
-import * as common from "../../../Background/common";
-import ListItem from "../ListItem/ListItem";
+import {SlidePaneProvider} from "../../../contexts/SlidePaneContext";
+import {dateUtil} from "../../../utils";
+import Item from "./Item/Item";
 import ItemDetail from "../ItemDetail/ItemDetail";
-import Dropdown from "../../modules/dropdown";
+import Dropdown from "../../../components/DropDown";
 import './List.css';
 
 const List = ({transaction}) => {
@@ -34,14 +34,16 @@ const List = ({transaction}) => {
         return acc;
     }, {});*/
 
-    const results = Object.entries(transaction).map(([date, transaction], index) => {
+
+
+    const results = Object.entries(transaction).map(([date, t], index) => {
         return (
             <React.Fragment key={index}>
                 <div key={index} className={`link ${isListActive[index] ? 'open' : ''}`} onClick={() => toggleActive(index)}>
-                    {common.dateFormat(date, 'ddd MMM D YYYY')}<i className="chevron-down"></i>
+                    {dateUtil.dateFormat(date, 'ddd MMM D YYYY')}<i className="chevron-down"></i>
                 </div>
                 <Dropdown open={isListActive[index]}>
-                    <ListItem transaction={transaction}/>
+                    <Item transaction={t}/>
                 </Dropdown>
             </React.Fragment>
         );

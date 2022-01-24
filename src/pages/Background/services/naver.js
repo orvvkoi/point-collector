@@ -1,7 +1,5 @@
-import {NAVER} from "../configs";
-import * as common from "../common";
-import {getOnlyNumber, getTodayDate} from "../common";
-
+import {NAVER} from "../../../configs";
+import {storageUtil, dateUtil, stringUtil, arrayUtil} from "../../../utils";
 
 /**
  * @TODO
@@ -18,9 +16,7 @@ const accountInfo = async() => {
         return;
     }
 
-    const id = json.result.naverId;
-
-    return id;
+    return json.result.naverId;
 }
 
 const verifyLogin = async () => {
@@ -91,6 +87,13 @@ const everyDayRewardFilter = (rewards = []) => {
     });
 }
 
+/**
+ * mobileRewardFilter
+ * requestId 는 아무거나 넣어도 상관없어 보임.
+ * @param requestId
+ * @param rewards
+ * @returns {*[]}
+ */
 const mobileRewardFilter = (requestId, rewards = []) => {
     return rewards.filter(
         (data) => {
@@ -137,7 +140,7 @@ const getAvailableRewards = async (accountId) => {
      * 필요에 따라, 필터 수행.
      * -> 처리는 했지만 최적화 필요
      */
-    const transaction = await common.getTransaction({accountId, serviceKey: NAVER.serviceKey});
+    const transaction = await storageUtil.getTransaction({accountId, serviceKey: NAVER.serviceKey});
 
     if(transaction && Object.keys(transaction).length > 0) {
         const ids = Object.keys(transaction).map(key=> {
@@ -160,7 +163,7 @@ const fetchRewardResults = async (accountId, rewards) => {
     }
 
     const serviceKey = NAVER.serviceKey;
-    const createdAt = common.getTime();
+    const createdAt = dateUtil.getTime();
 
     let responses = await Promise.allSettled(rewards.map(async reward => {
 
@@ -186,37 +189,27 @@ const fetchRewardResults = async (accountId, rewards) => {
              * @TODO
              * 별도의 안내 메세지 없이 상품 페이지로 리다이텍트 되는 경우가 있음. 확인필요.
              */
-            if (responseText.indexOf('SUCCESS') > -1) {
+            if (responseText.indexOf('SUCCESS') > -1 || reward.type === 'mobile') {
                 isSuccess = true;
 
-                if(reward.type === 'every' || reward.type === 'mobile') {
-                    /**
-                     * @TODO
-                     * rewardText 대로 주는지 확인 필요. 불규칙함.
-                     * type이 every인 경우 별도의 alert 발생하지 않는것으로 보임.
-                     * rewardText 로 임시 대체 (rewardText= '10원')
-                     */
-                    const point = common.getOnlyNumber(reward.rewardText);
-
-                    reward.reward = point;
-                } else {
-                    const point = (() => {
+                if(reward.type === 'once') {
+                    reward.reward = (() => {
                         let point;
                         /**
                          * @TODO
                          * clickRewardAmount가 있는 경우도 있음.
                          * 규칙적이지 않음.
                          */
-                        if(reward.clickRewardAmount) {
+                        if (reward.clickRewardAmount) {
                             point = reward.clickRewardAmount;
                         } else {
-                            point = getOnlyNumber(responseText.split('alert')[1].split(');')[0]);
+                            point = stringUtil.getOnlyNumber(responseText.split('alert')[1].split(');')[0]);
                         }
 
                         return point;
                     })();
-
-                    reward.reward = point;
+                } else {
+                    reward.reward = stringUtil.getOnlyNumber(reward.rewardText);
                 }
             } else if(responseText.indexOf('PASS') > -1){
                 reward.reason = responseText.indexOf('alert') > -1 ? responseText.split('alert("')[1].split('");')[0] : 'unknown';
@@ -226,7 +219,8 @@ const fetchRewardResults = async (accountId, rewards) => {
              * @TODO
              * 매일 적립인 경우
              * 적립 시간이 아니거나, 이미 적립된 경우, 금일 적립 이벤트가 종료된 경우.
-             * 400에러 반환함.
+             * 400코드 반환함.
+             * 또는 모바일인 경우 400 코드 반환.
              * 반환 메세지 -> {"code":411,"message":"잘못된 파라미터 입니다."}
              */
         } else if(response.status === 400) {
@@ -290,7 +284,7 @@ const process = async () => {
     const payload = await fetchRewardResults(accountId, rewards);
     console.log('fetchRewardResults: ', payload);
 
-    await common.setStorage(NAVER.serviceKey, accountId, payload);
+    await storageUtil.setStorage(NAVER.serviceKey, accountId, payload);
 
     return payload;
 }

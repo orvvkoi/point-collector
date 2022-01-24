@@ -1,11 +1,12 @@
 import React from 'react'
 
-import SlidingPane from "react-sliding-pane";
-import 'react-slidedown/lib/slidedown.css'
+import ReactSlidingPane from "react-sliding-pane";
+import "react-sliding-pane/dist/react-sliding-pane.css";
+import "./SlidingPane.css";
 
-const Pane = (props) => {
+const SlidingPane = (props) => {
     return (
-        <SlidingPane
+        <ReactSlidingPane
             className={props.className || 'item-detail-layer-popup'}
             isOpen={props.isPaneOpen || false}
             title={props.title}
@@ -15,8 +16,8 @@ const Pane = (props) => {
             onRequestClose={() => props.setIsPaneOpen(false)}
         >
             {props.children}
-        </SlidingPane>
+        </ReactSlidingPane>
     )
 }
 
-export default React.memo(Pane);
+export default React.memo(SlidingPane);

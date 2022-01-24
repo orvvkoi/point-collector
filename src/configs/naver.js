@@ -1,12 +1,4 @@
-export const STORAGE_KEY = 'point-collector';
-export const EXTENSION_ID = 'fnjnbigaldpfibknjoadnjlccokggkln';
-
-export const TEST = {
-    serviceKey: 'test',
-    domain: 'https://www.google.com'
-}
-
-export const NAVER = {
+export default {
     serviceKey: 'naver',
     domain: 'https://www.naver.com',
     url: {

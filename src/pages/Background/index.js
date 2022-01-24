@@ -1,6 +1,6 @@
 import {naver} from './services';
-import * as common from "./common";
-import {NAVER} from "./configs";
+import {storageUtil} from "../../utils";
+import {NAVER} from "../../configs";
 
 
 /*global chrome*/
@@ -16,7 +16,7 @@ const process = async () => {
 }
 
 const requestStorage = async(key) => {
-    const results = await common.getStorage(key);
+    const results = await storageUtil.getStorage(key);
 
     return results;
 }

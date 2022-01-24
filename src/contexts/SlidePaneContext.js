@@ -4,7 +4,7 @@ const SlidePaneContext = createContext({
     paneProps: {},
     isPaneOpen: false,
     setIsPaneOpen: () => {},
-    showSlidePane: (props) => {}
+    showSlidePane: () => {}
 });
 
 const SlidePaneProvider = ({children}) => {

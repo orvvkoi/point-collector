@@ -3,7 +3,7 @@ import React from 'react'
 import {SlideDown} from 'react-slidedown'
 import 'react-slidedown/lib/slidedown.css'
 
-function Dropdown(props) {
+function DopDown(props) {
     return (
         <SlideDown closed={!props.open}>
             {props.children }
@@ -11,4 +11,4 @@ function Dropdown(props) {
     )
 }
 
-export default React.memo(Dropdown);
+export default React.memo(DopDown);
