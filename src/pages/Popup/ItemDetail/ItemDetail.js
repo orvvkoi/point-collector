@@ -8,12 +8,7 @@ import LinkIcon from "../../../assets/img/link.svg";
 import {configUtil, dateUtil} from "../../../utils";
 import "./ItemDetail.css";
 
-
-
 const DetailContainer = (props) => {
-
-    console.log('DetailContainer props ', props)
-
     const {domain} = configUtil.getConfig(props.serviceKey);
 
     /**

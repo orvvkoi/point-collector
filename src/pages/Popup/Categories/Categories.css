@@ -1,4 +1,4 @@
-.service-filter {
+.category-container {
     padding: 0 20px 10px 20px;
     color: #8a9ca5;
     font-size: 14px;
@@ -6,14 +6,14 @@
 }
 
 
-.service-filter .service-group {
+.category-container .main-category {
     display: flex;
     align-items: center;
     justify-content: flex-start;
     flex-wrap: wrap;
 }
 
-.service-group .service {
+.main-category .category {
     display: flex;
     align-items: center;
     cursor:pointer;
@@ -23,27 +23,27 @@
     transition: 0.3s;
 }
 
-.service-group .service span {
+.main-category .category span {
     margin-right: 7px;
 }
 
-.service-detail {
+.sub-category {
     display: flex;
     align-items: center;
     justify-content: flex-start;
     flex-wrap: wrap;
     overflow: hidden;
-    padding-top: 5px;
     max-height: 0;
     transition: max-height .5s ease-in-out;
 }
 
-.service-detail.active {
+.sub-category.active {
+    padding-top: 5px;
     max-height: 100px;
     transition: max-height 0.25s ease-in;
 }
 
-.service-detail .account {
+.sub-category .category {
     display: flex;
     align-items: center;
     padding: 0 5px 5px 0;
@@ -52,8 +52,8 @@
     cursor: pointer;
 }
 
-.service-group .service.active, .service-group .service:hover,
-.service-detail .account.active, .service-detail .account:hover{
+.main-category .category.active, .main-category .category:hover,
+.sub-category .category.active, .sub-category .category:hover{
     opacity: 1;
     color: #d94f5c;
 }

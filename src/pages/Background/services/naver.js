@@ -1,5 +1,5 @@
 import {NAVER} from "../../../configs";
-import {storageUtil, dateUtil, stringUtil, arrayUtil} from "../../../utils";
+import {storageUtil, dateUtil, stringUtil} from "../../../utils";
 
 /**
  * @TODO

@@ -1,12 +1,9 @@
 import {naver} from './services';
 import {storageUtil} from "../../utils";
-import {NAVER} from "../../configs";
-
 
 /*global chrome*/
 chrome.runtime.onInstalled.addListener(() => {
     console.log('Chrome extension successfully installed!');
-    return;
 });
 
 const process = async () => {
@@ -15,8 +12,8 @@ const process = async () => {
     return results;
 }
 
-const requestStorage = async(key) => {
-    const results = await storageUtil.getStorage(key);
+const requestStorage = async() => {
+    const results = await storageUtil.getStorage();
 
     return results;
 }

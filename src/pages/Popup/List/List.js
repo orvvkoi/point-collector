@@ -40,7 +40,7 @@ const List = ({transaction}) => {
         return (
             <React.Fragment key={index}>
                 <div key={index} className={`link ${isListActive[index] ? 'open' : ''}`} onClick={() => toggleActive(index)}>
-                    {dateUtil.dateFormat(date, 'ddd MMM D YYYY')}<i className="chevron-down"></i>
+                    {dateUtil.dateFormat(date, 'ddd MMM D YYYY')}<i className="chevron-down" />
                 </div>
                 <Dropdown open={isListActive[index]}>
                     <Item transaction={t}/>
@@ -52,10 +52,9 @@ const List = ({transaction}) => {
     return (
         <SlidePaneProvider>
             <ul className="list-container scrollbar">
-                <li>
-                    {results}
-                </li>
+                <li>{results}</li>
             </ul>
+
             <ItemDetail />
         </SlidePaneProvider>
     );

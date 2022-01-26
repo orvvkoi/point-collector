@@ -1,5 +1,5 @@
 import * as configs from "../configs";
-import * as storage from "./lib/storage";
+import * as storage from "../services/storage";
 import * as arrayUtil from "./arrayUtil";
 import * as stringUtil from "./stringUtil";
 import * as dateUtil from "./dateUtil";
