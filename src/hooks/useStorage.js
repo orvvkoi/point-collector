@@ -15,6 +15,8 @@ const useStorage = () => {
         const getStorage = async () => {
             const res = await storageUtil.getStorage();
 
+            if(!res) return storage;
+
             setStorage(res);
         };
 
