@@ -1,5 +1,6 @@
 import {NAVER} from "../../../configs";
 import {storageUtil, dateUtil, stringUtil} from "../../../utils";
+import {getAccountInfo} from "../../../utils/storageUtil";
 
 /**
  * @TODO
@@ -132,7 +133,11 @@ const getAvailableRewards = async (accountId) => {
 
     console.log('availableMobileRewards ', availableMobileRewards);
     console.log('onceRewards ', onceRewards)
-    console.log('everyDayRewards ', everyDayRewards)
+    console.log('everyDayRewards ', everyDayRewards);
+
+    if(!accountId) {
+        return result;
+    }
 
     /**
      * @TODO
@@ -260,21 +265,23 @@ const process = async () => {
         return false;
     }
 
-    const accountId = await accountInfo();
-    console.log('accountId: ', accountId);
+    const accountKey = await accountInfo();
+    console.log('accountKey: ', accountKey);
 
     /**
      * @TODO
      * backend 에러. 처리 필요.
      * 계정 정보 가져오는 부분. 안되면 my.html로 대체
      */
-    if(!accountId) {
+    if(!accountKey) {
         console.log('Error getting your account information.');
 
         return;
     }
 
-    const rewards = await getAvailableRewards(accountId);
+    const accountId = getAccountInfo(NAVER.serviceKey, accountKey);
+
+    const rewards = await getAvailableRewards(accountKey);
     console.log('getAvailableRewards: ', rewards);
 
     if(!rewards || rewards.length === 0) {
@@ -284,7 +291,7 @@ const process = async () => {
     const payload = await fetchRewardResults(accountId, rewards);
     console.log('fetchRewardResults: ', payload);
 
-    await storageUtil.setStorage(NAVER.serviceKey, accountId, payload);
+    await storageUtil.setStorage(NAVER.serviceKey, accountKey, payload);
 
     return payload;
 }

@@ -64,6 +64,8 @@ const DetailContainer = (props) => {
 const ItemDetail = () => {
     const  { isPaneOpen, setIsPaneOpen, paneProps } = React.useContext(SlidePaneContext);
 
+    console.log('paneProps ', paneProps)
+
     const createdAt = dateUtil.dateFormat(paneProps.createdAt, 'YYYY-MM-DD HH:mm:ss');
 
     return (

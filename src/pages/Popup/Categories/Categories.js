@@ -53,7 +53,7 @@ const Categories = ({account, services, statisticsDetail, todayTransaction, hand
                                     const isActive = activeCategory.serviceKey === serviceKey;
                                     const iconUrl = configUtil.getFavicon(configUtil.getConfig(serviceKey).domain);
                                     const point = services[serviceKey];
-                                    const todayPoint = todayTransaction? arrayUtil.calculateTotal(configUtil.getConfig(todayTransaction, {serviceKey})) : 0;
+                                    const todayPoint = todayTransaction? arrayUtil.calculateTotal(todayTransaction, {serviceKey}) : 0;
 
                                     const categoryData = {
                                         isActive, serviceKey, iconUrl, point, todayPoint, handleCategory

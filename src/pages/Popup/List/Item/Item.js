@@ -16,7 +16,7 @@ const Item = ({transaction}) => {
                 {
                     transaction.map((t, index)=> {
                         return (
-                            <li key={index} onClick={() => showSlidePane()}>
+                            <li key={index} onClick={() => showSlidePane(t)}>
                                 <div className='transaction'>
                                     <img className="icon-19 mr-3" src={configUtil.getFavicon(configUtil.getConfig(t.serviceKey).domain)} alt="service" />
                                     <span className='title'>{t.title}</span>
