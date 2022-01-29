@@ -21,7 +21,7 @@ const Item = ({transaction}) => {
                                     <img className="icon-19 mr-3" src={configUtil.getFavicon(configUtil.getConfig(t.serviceKey).domain)} alt="service" />
                                     <span className='title'>{t.title}</span>
                                 </div>
-                                <div data-tip={t.isSuccess ? 'Done successfully.' : t.reason || 'Unknown Error'}>
+                                <div data-tip={t.isSuccess ? 'Done successfully.' : t.reason || 'Unknown Error'} data-delay-show='500'>
                                     <img className={`icon-19 ${t.isSuccess ? 'mr-3 ' : ''}`} src={t.isSuccess ? OkIcon : FailIcon} alt="status" />
                                     {t.reward || 0}
                                 </div>

@@ -8,8 +8,9 @@ import './Popup.css';
 
 /**
  * @TODO
- * 실제 크롬 적용시 드랍다운 애니메이션 부드럽지 못한 현상.
+ * 1. 실제 크롬 적용시 드랍다운 애니메이션 부드럽지 못한 현상.
  * -> 세로폭 고정 해봐야함.
+ * 2. payment 등록 안된 경우에 대한 대처 필요.
  */
 const Popup = () => {
     const storage = useStorage();
@@ -28,7 +29,6 @@ const Popup = () => {
     /**
      * @TODO
      * useMemo 성능 측정
-     * @type {*|string}
      */
 	const todayPoint = useMemo(()=> {
         return todayTransaction ? arrayUtil.calculateTotal(todayTransaction) : '';

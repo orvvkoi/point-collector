@@ -1,6 +1,6 @@
 body {
     width: 400px;
-    max-height: 600px;
+    max-height: 650px;
     margin: 0;
     font-family: 'Apple SD Gothic Neo',arial,sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -15,6 +15,10 @@ code {
 
 .mr-3 {
     margin-right: 3px;
+}
+
+.mr-7 {
+    margin-right: 7px;
 }
 
 .icon-19 {
