@@ -162,9 +162,9 @@ const getAvailableRewards = async (accountId) => {
     return result;
 }
 
-const fetchRewardResults = async (accountId, rewards) => {
-    if (!accountId || !rewards) {
-        return false;
+const fetchRewardResults = async (rewards) => {
+    if (!rewards) {
+        return;
     }
 
     const serviceKey = NAVER.serviceKey;
@@ -242,7 +242,6 @@ const fetchRewardResults = async (accountId, rewards) => {
             reward: reward.reward,
             originUrl: reward.originUrl,
             serviceKey,
-            accountId,
             isSuccess,
             createdAt
         }
@@ -266,7 +265,6 @@ const process = async () => {
     }
 
     const accountKey = await accountInfo();
-    console.log('accountKey: ', accountKey);
 
     /**
      * @TODO
@@ -279,8 +277,6 @@ const process = async () => {
         return;
     }
 
-    const accountId = getAccountInfo(NAVER.serviceKey, accountKey);
-
     const rewards = await getAvailableRewards(accountKey);
     console.log('getAvailableRewards: ', rewards);
 
@@ -288,7 +284,7 @@ const process = async () => {
         return;
     }
 
-    const payload = await fetchRewardResults(accountId, rewards);
+    const payload = await fetchRewardResults(rewards);
     console.log('fetchRewardResults: ', payload);
 
     await storageUtil.setStorage(NAVER.serviceKey, accountKey, payload);
