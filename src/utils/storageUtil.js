@@ -43,13 +43,17 @@ export const setStorage = async (serviceKey, accountKey, newTransactions) => {
     const todayTime = dateUtil.getTodayStartOf();
 
     if (storageData) {
-        let {account: a, statistics: s, statisticsDetail: sd, transactions: t} = {...storageData}
+        let {account: a, statistics: s, statisticsDetail: sd, transaction: t} = {...storageData}
 
-        const accountId = a[accountKey];
+        if(!a[serviceKey][accountKey]) {
+            a[serviceKey][accountKey] = stringUtil.generateRandomString();
+        }
+
+        const accountId = a[serviceKey][accountKey];
         transactions = arrayUtil.addKeyValueAllArrayObjet(transactions, {accountId, serviceKey});
 
         if (t && t[todayTime]) {
-            const ids = new Set(t[todayTime].map(o => o.id));
+            const ids = new Set(t[todayTime].filter(o=>accountId === o.accountId).map(o => o.id));
             t[todayTime] = [...t[todayTime], ...transactions.filter(o => !ids.has(o.id))];
         } else {
             t[todayTime] = transactions;
@@ -58,11 +62,9 @@ export const setStorage = async (serviceKey, accountKey, newTransactions) => {
         s['total'] = isNaN(s['total']) ? totalReward : parseInt(s['total']) + totalReward;
         s[serviceKey] = isNaN(s[serviceKey]) ? totalReward : parseInt(s[serviceKey]) + totalReward;
 
-        sd[serviceKey] = {
-            [accountId]: isNaN(sd[serviceKey][accountId]) ? totalReward : parseInt(sd[serviceKey][accountId]) + totalReward
-        }
+        sd[serviceKey][accountId] = isNaN(sd[serviceKey][accountId]) ? totalReward : parseInt(sd[serviceKey][accountId]) + totalReward;
 
-        newData = {[configs.STORAGE_KEY]: {a, s, sd, t}}
+        newData = {[configs.STORAGE_KEY]: {account: a, statistics: s, statisticsDetail: sd, transaction: t}}
     } else {
         const randStr = stringUtil.generateRandomString();
         transactions = arrayUtil.addKeyValueAllArrayObjet(transactions, {accountId: randStr, serviceKey});
